@@ -1,13 +1,14 @@
 # controlnet_stable_tensorrt
-本项目实现用tensorrt加速有controlnet的stable diffusion，基于文生图进行演示
 
-由于nvidia官方只有stable diffusion的demo，并没有加入controlnet,但是很多道友却需要controlnet，因此特来渡下有缘人。同时本项目也有不完善的地方，错误之处，望请海涵。
+This project implements TensorRT acceleration for Stable Diffusion with ControlNet, demonstrated through text-to-image generation.
 
-## 依赖库
+Since NVIDIA officially only provides a Stable Diffusion demo without ControlNet integration, but many users need ControlNet functionality, this project aims to help those in need. Please note that this project has some imperfections, and any errors are appreciated to be pointed out.
 
-本项目基于sd1.5开发，采用的opset为17（经测试，sd2.1也同样可以）
+## Dependencies
 
-目前我测试的主要环境如下，更多细节，请参考：[tensorrt](https://github.com/NVIDIA/TensorRT/tree/release/8.6/demo/Diffusion)
+This project is developed based on SD1.5, using opset 17 (SD2.1 has also been tested and works).
+
+The main testing environment is as follows. For more details, please refer to: [tensorrt](https://github.com/NVIDIA/TensorRT/tree/release/8.6/demo/Diffusion)
 
 ```
 cuda-python              12.1.0rc1+1.g9e30ea2.dirty
@@ -26,26 +27,25 @@ torch                    1.13.1+cu117
 triton                   2.0.0
 ```
 
-## 运行
+## Running
 
 ```bash
 python3 demo_txt2img_db.py  --hf-token="your huggingface token" -v
 ```
 
-*Note:Build engine的过程异常漫长，大约30-40分钟，请耐心等待*
+*Note: The engine building process is extremely time-consuming, taking approximately 30-40 minutes. Please be patient.*
 
-## 结果
+## Results
 
-对比了用tensorrt与不用的效果，基本上没有差异(左图为tensorrt优化后的)，效率提升大约30-40%左右（baseline采用fp16），在rtx8000上处理一张512的图片花费时间约1200ms
+Compared the performance with and without TensorRT - the results are essentially identical (left image is TensorRT-optimized), with efficiency improvement of approximately 30-40% (baseline using fp16). On an RTX 8000, processing a 512x512 image takes about 1200ms.
 
 <img src="./images/trt.png" alt="img" width="375" style="zoom:50%;" /><img src="./images/origin.png" alt="img" width="375" style="zoom:50%;" />
 
-## 不足
+## Limitations
 
-- 目前生成一张512x512的图片需要花费显存约30G左右，由于此项目基于tensorrt官方代码开发，因此，bug fix进度依赖官方，请酌情考虑
-- 目前图片写定了512x512，后续有时间优化成其它尺度
+- Currently, generating a 512x512 image requires approximately 30GB of VRAM. Since this project is developed based on NVIDIA's official code, bug fixes depend on official updates. Please consider this accordingly.
+- Currently, the image size is fixed at 512x512. Future updates may optimize for other dimensions.
 
-## 感谢
+## Acknowledgments
 
-本项目参考了[tensorrt](https://github.com/NVIDIA/TensorRT/tree/release/8.6/demo/Diffusion)以及[paddle](https://github.com/PaddlePaddle/PaddleNLP/tree/develop/ppdiffusers/deploy)，感谢开源的力量
-
+This project references [tensorrt](https://github.com/NVIDIA/TensorRT/tree/release/8.6/demo/Diffusion) and [paddle](https://github.com/PaddlePaddle/PaddleNLP/tree/develop/ppdiffusers/deploy). Thanks to the power of open source.
